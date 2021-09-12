@@ -35,6 +35,8 @@
       <div class="row">
         <div class="col">
           <v-data-table
+            :loading="doSearch"
+            loading-text="Searching..."
             :headers="headers"
             :items="data"
             :items-per-page="10"
@@ -59,7 +61,7 @@
 <script>
 import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
-import errorParser from "../lib/errorParser";
+import errorParser from "@/lib/errorParser";
 
 export default {
   name: "Home",
@@ -156,6 +158,7 @@ export default {
     },
     async search() {
       if (!this.doSearch) return;
+      this.data = [];
       this.snackbar = false;
       this.snackbarText = "";
       if (!this.$refs.form.validate()) return;
@@ -201,3 +204,9 @@ export default {
   },
 };
 </script>
+
+<style>
+td:hover {
+  cursor: pointer;
+}
+</style>
