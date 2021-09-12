@@ -176,6 +176,8 @@ export default {
               "sku"
             )}.p?skuId=${this.getStateKey("sku")}`
           );
+        } else {
+          this.snackbarText = `Out of stock!`;
         }
       } catch (error) {
         if ([400, 500].includes(error.response.status)) this.doSearch = false;
