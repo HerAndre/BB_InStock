@@ -12,6 +12,8 @@ export default new Vuex.Store({
   state: {
     sku: "",
     postalCode: "",
+    searchCount: 0,
+    errorCount: 0,
   },
   mutations: {
     commitSku(state, sku) {
@@ -19,6 +21,12 @@ export default new Vuex.Store({
     },
     commitPostalCode(state, postalCode) {
       state.postalCode = postalCode;
+    },
+    commitIncrementSearchCount(state) {
+      state.searchCount = state.searchCount + 1;
+    },
+    commitIncrementErrorCount(state) {
+      state.errorCount = state.errorCount + 1;
     },
   },
   actions: {
@@ -52,6 +60,12 @@ export default new Vuex.Store({
       });
       commit('commitPostalCode', postalCode);
     },
+    incrementSearchCount({ commit }) {
+      commit('commitIncrementSearchCount');
+    },
+    incrementErrorCount({ commit }) {
+      commit('commitIncrementErrorCount');
+    }
   },
   modules: {},
   plugins: [vuexLocal.plugin],
