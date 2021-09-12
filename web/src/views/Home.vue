@@ -178,6 +178,7 @@ export default {
           );
         }
       } catch (error) {
+        if ([400, 500].includes(error.response.status)) this.doSearch = false;
         this.snackbarText = errorParser(error);
       }
       this.snackbar = true;
