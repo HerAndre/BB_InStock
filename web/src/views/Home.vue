@@ -59,6 +59,7 @@
 <script>
 import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
+import errorParser from "../lib/errorParser";
 
 export default {
   name: "Home",
@@ -68,6 +69,7 @@ export default {
       valid: true,
       lastRefresh: null,
       doSearch: false,
+      snackbarText: "",
       headers: [
         {
           text: "Store name",
@@ -101,17 +103,43 @@ export default {
       this.setSku(this.$route.query.sku);
     }
     if (this.getStateKey("sku")) {
-      this.$router.replace({
-        query: { ...this.$route.query, sku: this.getStateKey("sku") },
-      });
+      this.$router
+        .replace({
+          query: { ...this.$route.query, sku: this.getStateKey("sku") },
+        })
+        .catch((err) => {
+          // Ignore the vuex err regarding  navigating to the page they are already on.
+          if (
+            err.name !== "NavigationDuplicated" &&
+            !err.message.includes(
+              "Avoided redundant navigation to current location"
+            )
+          ) {
+            // But print any other errors to the console
+            console.error(err);
+          }
+        });
     }
     if (this.getStateKey("postalCode")) {
-      this.$router.replace({
-        query: {
-          ...this.$route.query,
-          postalCode: this.getStateKey("postalCode"),
-        },
-      });
+      this.$router
+        .replace({
+          query: {
+            ...this.$route.query,
+            postalCode: this.getStateKey("postalCode"),
+          },
+        })
+        .catch((err) => {
+          // Ignore the vuex err regarding  navigating to the page they are already on.
+          if (
+            err.name !== "NavigationDuplicated" &&
+            !err.message.includes(
+              "Avoided redundant navigation to current location"
+            )
+          ) {
+            // But print any other errors to the console
+            console.error(err);
+          }
+        });
     }
     setInterval(
       function () {
@@ -129,35 +157,41 @@ export default {
     async search() {
       if (!this.doSearch) return;
       this.snackbar = false;
+      this.snackbarText = "";
       if (!this.$refs.form.validate()) return;
       try {
-        const { data } = await axios.get(`public/product/${this.sku}`, {
-          params: { postalCode: this.postalCode },
-        });
+        const { data } = await axios.get(
+          `public/product/${this.getStateKey("sku")}`,
+          {
+            params: { postalCode: this.getStateKey("postalCode") },
+          }
+        );
         this.lastRefresh = new Date();
         this.data = Object.values(data);
         if (this.data.length > 1) {
+          this.snackbarText = `Found ${this.data.length} stores!`;
           this.doSearch = false;
           window.open(
-            `https://www.bestbuy.com/site/${this.sku}.p?skuId=${this.sku}`
+            `https://www.bestbuy.com/site/${this.getStateKey(
+              "sku"
+            )}.p?skuId=${this.getStateKey("sku")}`
           );
         }
       } catch (error) {
-        console.error(error);
+        this.snackbarText = errorParser(error);
       }
       this.snackbar = true;
     },
     handleClick() {
       window.open(
-        `https://www.bestbuy.com/site/${this.sku}.p?skuId=${this.sku}`
+        `https://www.bestbuy.com/site/${this.getStateKey(
+          "sku"
+        )}.p?skuId=${this.getStateKey("sku")}`
       );
     },
   },
   computed: {
     ...mapGetters(["getStateKey"]),
-    snackbarText() {
-      return this.data.length > 0 ? "Sku available!" : "Out of stock!";
-    },
     snackbarColor() {
       return this.data.length > 0 ? "success" : "error";
     },

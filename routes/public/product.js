@@ -11,10 +11,18 @@ const reducer = (obj, curr) => ({
 
 router.get('/:id', async function (req, res, next) {
   try {
-    const data = await bby.realTimeAvailability(req.params.id, { postalCode: req.query.postalCode });
-    let { stores } = data;
-    stores = stores.reduce(reducer, {});
-    res.json(stores);
+    try {
+      const data = await bby.realTimeAvailability(req.params.id, { postalCode: req.query.postalCode });
+      let { stores } = data;
+      stores = stores.reduce(reducer, {});
+      res.json(stores);
+    } catch (error) {
+      if (error.body && error.body.error) {
+        throw ({ client: true, status: error.body.error.code, msg: error.body.error.message });
+      } else {
+        throw ({ client: true, status: error.status, msg: error.message });
+      }
+    }
   } catch (error) {
     next(error);
   }
