@@ -100,6 +100,19 @@ export default {
     ) {
       this.setSku(this.$route.query.sku);
     }
+    if (this.getStateKey("sku")) {
+      this.$router.replace({
+        query: { ...this.$route.query, sku: this.getStateKey("sku") },
+      });
+    }
+    if (this.getStateKey("postalCode")) {
+      this.$router.replace({
+        query: {
+          ...this.$route.query,
+          postalCode: this.getStateKey("postalCode"),
+        },
+      });
+    }
     setInterval(
       function () {
         this.search();
