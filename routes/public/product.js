@@ -9,12 +9,9 @@ const reducer = (obj, curr) => ({
 });
 
 
-router.get('/', async function (req, res, next) {
+router.get('/:id', async function (req, res, next) {
   try {
-    const { body } = req;
-    body.sku = 6451332;
-    body.postalCode = 21032;
-    const data = await bby.realTimeAvailability(body.sku, { postalCode: body.postalCode });
+    const data = await bby.realTimeAvailability(req.params.id, { postalCode: req.query.postalCode });
     let { stores } = data;
     stores = stores.reduce(reducer, {});
     res.json(stores);
