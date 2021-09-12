@@ -1,21 +1,21 @@
 <template>
-  <div class="v-responsive mx-auto overflow-visible" style="max-width: 868px">
+  <div class="mx-auto overflow-visible" style="max-width: 868px">
     <div class="container container-fluid">
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-text-field
           :rules="rules.postalCode"
           color="purple darken-2"
           label="Postal Code"
-          @change="updatePostalCode"
-          :value="postalCode"
+          @change="setPostalCode"
+          :value="getStateKey('postalCode')"
           required
         ></v-text-field>
         <v-text-field
           :rules="rules.sku"
           color="purple darken-2"
           label="Sku Id"
-          @change="updateSku"
-          :value="sku"
+          @change="setSku"
+          :value="getStateKey('sku')"
           required
         ></v-text-field>
         <v-btn
@@ -58,6 +58,7 @@
 
 <script>
 import axios from "axios";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "Home",
@@ -86,8 +87,19 @@ export default {
       },
     };
   },
-  props: ["sku", "postalCode"],
   mounted() {
+    if (
+      this.$route.query.postalCode &&
+      this.$route.query.postalCode !== this.getStateKey("postalCode")
+    ) {
+      this.setPostalCode(this.$route.query.postalCode);
+    }
+    if (
+      this.$route.query.sku &&
+      this.$route.query.sku !== this.getStateKey("sku")
+    ) {
+      this.setSku(this.$route.query.sku);
+    }
     setInterval(
       function () {
         this.search();
@@ -96,16 +108,7 @@ export default {
     );
   },
   methods: {
-    updatePostalCode(val) {
-      this.$router.push({
-        query: { ...this.$route.query, postalCode: val },
-      });
-    },
-    updateSku(val) {
-      this.$router.push({
-        query: { ...this.$route.query, sku: val },
-      });
-    },
+    ...mapActions(["setSku", "setPostalCode"]),
     startSearch() {
       this.doSearch = true;
       this.search();
@@ -138,6 +141,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["getStateKey"]),
     snackbarText() {
       return this.data.length > 0 ? "Sku available!" : "Out of stock!";
     },
