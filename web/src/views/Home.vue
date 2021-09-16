@@ -159,7 +159,7 @@ export default {
       function () {
         this.search();
       }.bind(this),
-      20000
+      8000
     );
   },
   methods: {
