@@ -161,6 +161,10 @@ export default {
       }.bind(this),
       8000
     );
+    const permission = Notification.permission;
+    if (permission === "default") {
+      Notification.requestPermission();
+    }
   },
   methods: {
     ...mapActions([
@@ -203,6 +207,12 @@ export default {
               "sku"
             )}.p?skuId=${this.getStateKey("sku")}`
           );
+          const notification = new Notification("Success");
+          this.showNotification();
+          notification.onclick = function () {
+            window.parent.focus();
+            notification.close();
+          };
         } else {
           this.snackbarText = `Out of stock!`;
         }
@@ -219,6 +229,18 @@ export default {
           "sku"
         )}.p?skuId=${this.getStateKey("sku")}`
       );
+    },
+    showNotification() {
+      if (document.visibilityState === "visible") {
+        return;
+      }
+      var title = "BBSCR";
+      var body = "Sku Found!";
+      var notification = new Notification(title, { body });
+      notification.onclick = () => {
+        notification.close();
+        window.parent.focus();
+      };
     },
   },
   computed: {
