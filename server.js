@@ -8,6 +8,7 @@ require('dotenv').config();
 const app = express();
 
 const publicProduct = require('./routes/public/product');
+const publicStats = require('./routes/public/stats');
 
 if (app.get('env') === 'production') {
   // trust first proxy
@@ -25,6 +26,7 @@ app.use(express.json()); // default 1MB
 const fs = require('fs');
 
 app.use('/api/public/product', publicProduct);
+app.use('/api/public/stats', publicStats);
 
 // configure the history fallback
 app.use(history());

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
+import GoogleAnalytics from '@/views/GoogleAnalytics.vue';
 
 Vue.use(VueRouter);
 
@@ -17,6 +18,12 @@ const routes = [
       };
     },
   },
+  {
+    path: '/stats',
+    name: 'Statistics',
+    component: GoogleAnalytics,
+    props: true
+  }
 ];
 
 const router = new VueRouter({
