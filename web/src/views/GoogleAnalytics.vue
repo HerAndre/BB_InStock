@@ -4,7 +4,7 @@
       <h2>Google Analytics</h2>
       <div class="row mt-2">
         <div class="col-1"></div>
-        <textarea class="col-10" v-model="textAreaText" readonly style="background-color: #e5e5e5; min-height: 300px"></textarea>
+        <textarea class="col-10" v-model="textAreaText" readonly style="background-color: #e5e5e5; min-height: 300px; width: 100%"></textarea>
       </div>
       <v-form ref="form" lazy-validation>
         <div class="row justify-content-center mt-3">
