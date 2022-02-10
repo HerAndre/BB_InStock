@@ -15,15 +15,28 @@ router.get('/', async function (req, res, next) {
       ids: 'ga:' + process.env.VIEW_ID,
     }
     const response = await jwt.authorize();
-
-    const result = await google.analytics('v3').data.ga.get({
-      ...defaults,
-      'start-date': '30daysAgo',
-      'end-date': 'today',
-      'dimensions': 'ga:city',
-      'metrics': 'ga:sessions'
-    })
-    res.json(result.data.rows.sort((a, b) => b[1] - a[1]));
+    try {
+      if (!req.query.dimension) {
+        const result = await google.analytics('v3').data.ga.get({
+          ...defaults,
+          'start-date': '30daysAgo',
+          'end-date': 'today',
+          'metrics': `ga:${req.query.metric}`,
+        })
+        res.json(result.data.rows.sort((a, b) => b[1] - a[1]));
+      } else {
+        const result = await google.analytics('v3').data.ga.get({
+          ...defaults,
+          'start-date': '30daysAgo',
+          'end-date': 'today',
+          'dimensions': `ga:${req.query.dimension}`,
+          'metrics': `ga:${req.query.metric}`,
+        })
+        res.json(result.data.rows.sort((a, b) => b[1] - a[1]));
+      }
+    } catch (error) {
+      throw ({ client: true, status: error.code, msg: error.message })
+    }
   } catch (error) {
     next(error);
   }
