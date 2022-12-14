@@ -8,7 +8,9 @@ require('dotenv').config();
 const app = express();
 
 const publicProduct = require('./routes/public/product');
+const publicPython = require('./routes/public/python');
 const publicStats = require('./routes/public/stats');
+const publicmailChimp = require('./routes/public/mailChimp');
 
 if (app.get('env') === 'production') {
   // trust first proxy
@@ -21,12 +23,14 @@ if (app.get('env') === 'production') {
     else next();
   });
 }
-app.use(express.json()); // default 1MB
+app.use(express.json({limit: '200mb'})); // default 1MB
 
 const fs = require('fs');
 
 app.use('/api/public/product', publicProduct);
+app.use('/api/public/python', publicPython);
 app.use('/api/public/stats', publicStats);
+app.use('/api/public/mailChimp', publicmailChimp);
 
 // configure the history fallback
 app.use(history());
