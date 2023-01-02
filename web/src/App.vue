@@ -2,18 +2,13 @@
   <v-app>
     <v-app-bar app color="primary" dark>
       <div class="d-flex align-center">
-        <!-- <router-link :to="'/'"><h2 style="color: white; text-decoration: none">Home</h2></router-link> -->
+        <router-link :to="'/'"><h2 style="color: white; text-decoration: none">Home</h2></router-link>
       </div>
       <v-spacer></v-spacer>
-      <!-- <div class="d-flex align-center">
+      <div class="d-flex align-center">
         <router-link :to="'/stats'"><h2 style="color: white; text-decoration: none">Stats</h2></router-link>
-      </div> -->
-      <!-- <div class="d-flex align-center ml-2">
-        <router-link :to="'/mailChimp'"><h2 style="color: white; text-decoration: none">ChimpLists</h2></router-link>
-      </div> -->
-      <!-- <div class="d-flex align-center ml-2">
-        <router-link :to="'/mailChimp/campaigns'"><h2 style="color: white; text-decoration: none">Campaigns</h2></router-link>
-      </div> -->
+      </div>
+
     </v-app-bar>
 
     <v-main>

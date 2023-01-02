@@ -4,18 +4,15 @@ import router from './router';
 import store from './store';
 import axios from 'axios';
 import vuetify from './plugins/vuetify';
-import JsonExcel from "vue-json-excel";
-import VueJsonToCsv from 'vue-json-to-csv';
-
+import VueGtag from 'vue-gtag';
 
 Vue.config.productionTip = false;
 
 axios.defaults.baseURL = '/api/';
 
-
-Vue.component("downloadCsv", VueJsonToCsv);
-Vue.component("downloadExcel", JsonExcel);
-
+Vue.use(VueGtag, {
+ config: { id: "UA-219199426-2" }
+}, router);
 
 new Vue({
   router,
